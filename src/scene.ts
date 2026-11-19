@@ -14,7 +14,7 @@ export function init(container: HTMLElement) {
   const timer = new THREE.Timer();
 
   // Add objects
-  const geometry = new THREE.PlaneGeometry(10, 10, 60, 60);
+  const geometry = new THREE.PlaneGeometry(2, 2);
 
   const uniforms = {
     u_time: { type: "f", value: 0.0 },
@@ -26,7 +26,8 @@ export function init(container: HTMLElement) {
     uniforms: uniforms,
     vertexShader: vertex,
     fragmentShader: fragment,
-    wireframe: true,
+    //wireframe: true,
+    //transparent: true,
   });
 
   const mesh = new THREE.Mesh(geometry, material);
