@@ -9,9 +9,8 @@ uniform float u_time;
 varying vec2 vUv;
 
 void main() {
-        vec2 st = gl_FragCoord.xy / u_resolution;
+        //vec2 uv = gl_FragCoord.xy / u_resolution;
+        vec2 uv = vUv * 2. - 1.;
 
-        st = st * 2. - 1.;
-
-        gl_FragColor = vec4(st.x, st.y, 0., 1.);
+        gl_FragColor = vec4(uv.x, uv.y, 0., 1.);
 }
