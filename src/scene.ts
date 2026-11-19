@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import fragment from "./shader/fragment.glsl";
 import vertex from "./shader/vertex.glsl";
@@ -6,9 +7,21 @@ import vertex from "./shader/vertex.glsl";
 export function init(container: HTMLElement) {
   let animationFrameId: number;
 
-  // Camera
-  const camera = new THREE.Camera();
-  camera.position.z = 1;
+  // Render
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // Scene
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000,
+  );
+  camera.position.set(0, 0, 12);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
 
   const scene = new THREE.Scene();
   const timer = new THREE.Timer();
@@ -33,13 +46,11 @@ export function init(container: HTMLElement) {
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-  // Render
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setPixelRatio(window.devicePixelRatio);
-  container.appendChild(renderer.domElement);
-
   // Handle window resize
   function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     uniforms.u_resolution.value.x = renderer.domElement.width;
     uniforms.u_resolution.value.y = renderer.domElement.height;
@@ -56,6 +67,7 @@ export function init(container: HTMLElement) {
 
   function animate() {
     animationFrameId = requestAnimationFrame(animate);
+    controls.update();
     render();
   }
 
